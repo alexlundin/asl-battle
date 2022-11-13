@@ -1,5 +1,5 @@
 <?php
-
+namespace AslBattles\FrontEnd;
 /**
  * The public-facing functionality of the plugin.
  *
@@ -20,7 +20,7 @@
  * @subpackage Asl_Battle/public
  * @author     Alex Lundin <aslundin@yandex.ru>
  */
-class Asl_Battle_Public {
+class AslBattlePublic {
 
 	/**
 	 * The ID of this plugin.

@@ -1,4 +1,6 @@
 <?php
+namespace AslBattles\Classes;
+use AslBattles\FrontEnd\AslBattlePublic;
 
 /**
  * The file that defines the core plugin class
@@ -27,7 +29,7 @@
  * @subpackage Asl_Battle/includes
  * @author     Alex Lundin <aslundin@yandex.ru>
  */
-class Asl_Battle {
+class AslBattleClass {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -103,26 +105,28 @@ class Asl_Battle {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-asl-battle-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/AslBattleLoader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-asl-battle-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/AslBattlesI18n.php';
+
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/utilites.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-asl-battle-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/AslBattleAdmin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-asl-battle-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/AslBattlePublic.php';
 
-		$this->loader = new Asl_Battle_Loader();
+		$this->loader = new AslBattleLoader();
 
 	}
 
@@ -137,7 +141,7 @@ class Asl_Battle {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Asl_Battle_i18n();
+		$plugin_i18n = new AslBattlesI18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -152,11 +156,15 @@ class Asl_Battle {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Asl_Battle_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new \AslBattleAdmin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
+		if ( isset( $_GET['page'] ) && sanitize_text_field( $_GET['page'] ) == 'asl_battles' ) {
+			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		}
+		$this->loader->add_action('init', $plugin_admin, 'register_battle_type');
+		$this->loader->add_action('admin_menu', $plugin_admin, 'add_menu');
+		$this->loader->add_action('rest_api_init', $plugin_admin, 'register_battle_routes');
 	}
 
 	/**
@@ -168,7 +176,7 @@ class Asl_Battle {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Asl_Battle_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new AslBattlePublic( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

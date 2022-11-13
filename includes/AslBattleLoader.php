@@ -1,5 +1,5 @@
 <?php
-
+namespace AslBattles\Classes;
 /**
  * Register all actions and filters for the plugin
  *
@@ -21,7 +21,7 @@
  * @subpackage Asl_Battle/includes
  * @author     Alex Lundin <aslundin@yandex.ru>
  */
-class Asl_Battle_Loader {
+class AslBattleLoader {
 
 	/**
 	 * The array of actions registered with WordPress.

@@ -1,5 +1,5 @@
 <?php
-
+namespace AslBattles\Classes;
 /**
  * Define the internationalization functionality
  *
@@ -24,7 +24,7 @@
  * @subpackage Asl_Battle/includes
  * @author     Alex Lundin <aslundin@yandex.ru>
  */
-class Asl_Battle_i18n {
+class AslBattlesI18n {
 
 
 	/**

@@ -3,6 +3,10 @@ body {
     overflow-x: hidden;
 }
 
+.wrap {
+    margin: 0;
+}
+
 .layout {
     margin-left: -20px;
     overflow-x: hidden;

@@ -26,6 +26,9 @@
  */
 
 // If this file is called directly, abort.
+use AslBattles\Classes\AslBattlesActivator;
+use AslBattles\Classes\AslBattlesDeactivator;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -39,20 +42,20 @@ define( 'ASL_BATTLE_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-asl-battle-activator.php
+ * This action is documented in includes/AslBattlesActivator.php
  */
 function activate_asl_battle() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-asl-battle-activator.php';
-	Asl_Battle_Activator::activate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/AslBattlesActivator.php';
+	AslBattlesActivator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-asl-battle-deactivator.php
+ * This action is documented in includes/AslBattlesDeactivator.php
  */
 function deactivate_asl_battle() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-asl-battle-deactivator.php';
-	Asl_Battle_Deactivator::deactivate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/AslBattlesDeactivator.php';
+	AslBattlesDeactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_asl_battle' );
@@ -62,7 +65,7 @@ register_deactivation_hook( __FILE__, 'deactivate_asl_battle' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-asl-battle.php';
+require plugin_dir_path( __FILE__ ) . 'includes/AslBattleClass.php';
 
 /**
  * Begins execution of the plugin.
@@ -75,7 +78,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-asl-battle.php';
  */
 function run_asl_battle() {
 
-	$plugin = new Asl_Battle();
+	$plugin = new AslBattles\Classes\AslBattleClass();
 	$plugin->run();
 
 }
