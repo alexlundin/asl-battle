@@ -1,5 +1,7 @@
 <?php
+
 namespace AslBattles\Classes;
+
 use AslBattles\FrontEnd\AslBattlePublic;
 
 /**
@@ -37,7 +39,7 @@ class AslBattleClass {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Asl_Battle_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Asl_Battle_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -46,7 +48,7 @@ class AslBattleClass {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
@@ -55,7 +57,7 @@ class AslBattleClass {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @var      string $version The current version of the plugin.
 	 */
 	protected $version;
 
@@ -113,7 +115,7 @@ class AslBattleClass {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/AslBattlesI18n.php';
 
-		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/utilites.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/utilites.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -162,9 +164,9 @@ class AslBattleClass {
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		}
-		$this->loader->add_action('init', $plugin_admin, 'register_battle_type');
-		$this->loader->add_action('admin_menu', $plugin_admin, 'add_menu');
-		$this->loader->add_action('rest_api_init', $plugin_admin, 'register_battle_routes');
+		$this->loader->add_action( 'init', $plugin_admin, 'register_battle_type' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu' );
+		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'register_battle_routes' );
 	}
 
 	/**
@@ -175,11 +177,16 @@ class AslBattleClass {
 	 * @access   private
 	 */
 	private function define_public_hooks() {
+
 		$plugin_public = new AslBattlePublic( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $plugin_public, 'register_block_battle' );
 
+//		$this->loader->add_action('wp_ajax_nopriv_update_rating', $plugin_public, 'update_rating_poll');
+//		$this->loader->add_action('wp_ajax_update_rating', $plugin_public, 'update_rating_poll');
+//		$this->loader->add_action('wp_ajax_add_item', $plugin_public, 'add_item_poll');
 	}
 
 	/**
@@ -195,8 +202,8 @@ class AslBattleClass {
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
@@ -205,8 +212,8 @@ class AslBattleClass {
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    Asl_Battle_Loader    Orchestrates the hooks of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -215,8 +222,8 @@ class AslBattleClass {
 	/**
 	 * Retrieve the version number of the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_version() {
 		return $this->version;

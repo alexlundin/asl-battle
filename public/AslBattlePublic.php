@@ -1,4 +1,5 @@
 <?php
+
 namespace AslBattles\FrontEnd;
 /**
  * The public-facing functionality of the plugin.
@@ -27,7 +28,7 @@ class AslBattlePublic {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
+	 * @var      string $plugin_name The ID of this plugin.
 	 */
 	private $plugin_name;
 
@@ -36,21 +37,43 @@ class AslBattlePublic {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
+	 * @var      string $version The current version of this plugin.
 	 */
 	private $version;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
+	 * @param string $plugin_name The name of the plugin.
+	 * @param string $version The version of this plugin.
+	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
+
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
+
 	}
+
+	public function asl_block_battle_render( $attr ) {
+		$id = $attr['battleId'];
+
+		return '<div class="asl-battle" id="asl-battle-' . $id . '" data-battle="' . $id . '"></div>';
+	}
+
+	public function register_block_battle() {
+		wp_register_script(
+			'asl-battle-block', plugin_dir_url( __FILE__ ) . '/block/build/js/asl-battle-block.js',
+			array( 'wp-api-fetch', 'wp-block-editor', 'wp-blocks', 'wp-components', 'wp-element', 'wp-i18n' )
+		);
+		register_block_type( 'asl/asl-battle', [
+			'api_version'     => 2,
+			'editor_script'   => 'asl-battle-block',
+			'render_callback' => array( $this, 'asl_block_battle_render' )
+		] );
+	}
+
 
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
