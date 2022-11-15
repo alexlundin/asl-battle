@@ -291,9 +291,11 @@ class AslBattleAdmin {
 
 	public function rest_get_battles(): void {
 		global $wpdb;
-		$head = $wpdb->get_results( "SELECT ID, post_title, post_content, post_modified FROM $wpdb->posts WHERE `post_type` = '$this->cpt_name'" );
+		$dbBattle = $wpdb->prefix . battle_table_name;
+		$head     = $wpdb->get_results( "SELECT ID, post_title, post_content, post_modified FROM $wpdb->posts WHERE `post_type` = '$this->cpt_name'" );
+
 		if ( ! empty( $head ) ) {
-			foreach ( $head as $item ) {
+			foreach ( $head as $key => $item ) {
 				$response[] = [
 					'id'                   => $item->ID,
 					'title'                => $item->post_title,
@@ -303,7 +305,23 @@ class AslBattleAdmin {
 					'rating'               => get_post_meta( $item->ID, 'rating', true ),
 					'count_views'          => get_post_meta( $item->ID, 'count_view', true ),
 					'username'             => get_post_meta( $item->ID, 'username', true ),
+					'arguments'            => []
 				];
+				$arguments  = $wpdb->get_results( "SELECT * FROM $dbBattle WHERE `id_item` = $item->ID" );
+				foreach ( $arguments as $argument ) {
+					$response[ $key ]['arguments'][] = [
+						'id'         => $argument->id,
+						'id_item'    => $argument->id_item,
+						'argument'   => $argument->argument,
+						'rating'     => $argument->rating,
+						'title'      => $argument->title,
+						'text'       => $argument->text,
+						'moderate'   => $argument->moderate,
+						'username'   => $argument->username,
+						'email'      => $argument->email,
+						'created_at' => $argument->created_at,
+					];
+				}
 			}
 			wp_send_json( $response, 200 );
 		}

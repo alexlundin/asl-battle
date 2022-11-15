@@ -17,6 +17,7 @@
     "@wordpress/scripts": "24.5.0"
   },
   "dependencies": {
-    "@wordpress/api-fetch": "^6.18.0"
+    "@wordpress/api-fetch": "^6.18.0",
+    "react-icons": "^4.6.0"
   }
 }

@@ -14,24 +14,16 @@ interface CollectionCreateFormProps {
     textBtn: string
 }
 
-const ModalFormArgument: FC<CollectionCreateFormProps> = ({
-                                                              open,
-                                                              onCreate,
-                                                              onCancel,
-                                                              id,
-                                                              argumentId,
-                                                              name,
-                                                              textBtn
-                                                          }) => {
+const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCancel, id, argumentId, name, textBtn}) => {
     const [form] = Form.useForm();
     const {data, isLoading} = useFetchArgumentQuery({id, argumentId})
     useEffect(() => {
         form.setFieldsValue(data)
     }, [data])
     useEffect(() => {
-       if (name == 'addArgument') {
-           form.resetFields()
-       }
+        if (name == 'addArgument') {
+            form.resetFields()
+        }
     }, [name])
     const validateMessages = {
         required: "${label} is required!",
@@ -94,26 +86,16 @@ const ModalFormArgument: FC<CollectionCreateFormProps> = ({
                     <Form.Item name="text" label="Description" rules={[{required: true}]}>
                         <Input.TextArea rows={3}/>
                     </Form.Item>
-                    <Row gutter={10}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="username"
-                                label="Username"
-                                rules={[{required: true}]}
-                            >
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="email"
-                                label="Email"
-                                rules={[{required: true}]}
-                            >
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+
+                    <Form.Item
+                        name="username"
+                        label="Username"
+                        rules={[{required: true}]}
+                    >
+                        <Input/>
+                    </Form.Item>
+
+
                     <Row gutter={10}>
                         <Col span={12}>
                             <Form.Item

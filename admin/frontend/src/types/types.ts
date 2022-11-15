@@ -5,8 +5,8 @@ export interface IBattle {
     first_argument_head: string;
     second_argument_head: string;
     rating: string;
-    count_views: string;
     username: string;
+    arguments: IArgument[]
 }
 
 export interface IArgument {
@@ -18,5 +18,4 @@ export interface IArgument {
     text: string;
     moderate: string;
     username: string;
-    email: string;
 }

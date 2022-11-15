@@ -1,17 +1,18 @@
-import {Button, Col, Divider, message, Modal, Row, Table} from 'antd';
+import {Badge, Button, Col, Divider, message, Modal, Row, Table} from 'antd';
 import type {ColumnsType} from 'antd/es/table';
-import React, {useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import PageHeader from "../components/PageHeader";
 import {useNavigate} from "react-router-dom";
 import {useDeleteBattleMutation, useFetchBattlesQuery} from "../redux/api/battle";
 import {ExclamationCircleOutlined} from '@ant-design/icons';
+import {IArgument} from "../types/types";
 
 interface DataType {
     key: string;
     id: string;
     title: string;
     rating: string;
-    count_views: string
+    moderate_args: IArgument[]
     actions: string;
 }
 
@@ -50,9 +51,16 @@ const HomePage = () => {
             width: 150
         },
         {
-            title: 'Count views',
-            dataIndex: 'count_views',
-            sorter: (a, b) => parseInt(a.count_views) - parseInt(b.count_views),
+            title: 'Moderate args',
+            dataIndex: 'moderate_args',
+            render: (args: IArgument[]): ReactElement => {
+                const moderItem = args.filter(item => parseInt(item.moderate) === 0)
+                if (moderItem.length == 0) {
+                    return (<Badge count={moderItem.length} showZero={true} style={{backgroundColor: '#52c41a'}}/>)
+                } else {
+                    return (<Badge count={moderItem.length}/>)
+                }
+            },
             width: 150
 
         },
@@ -144,7 +152,7 @@ const HomePage = () => {
                 id: item.id,
                 title: item.title,
                 rating: item.rating,
-                count_views: item.count_views,
+                moderate_args: item.arguments,
                 actions: item.id
             })
         }

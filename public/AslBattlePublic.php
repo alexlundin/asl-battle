@@ -94,7 +94,7 @@ class AslBattlePublic {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/asl-battle-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/prod/css/index.css', array(), $this->version, 'all' );
 
 	}
 
@@ -117,7 +117,16 @@ class AslBattlePublic {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/asl-battle-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name . '-manifest', plugin_dir_url( __FILE__ ) . 'js/prod/js/manifest.js', [], $this->version, true );
+		wp_enqueue_script( $this->plugin_name . '-vendor', plugin_dir_url( __FILE__ ) . 'js/prod/js/vendor.js', array( $this->plugin_name . '-manifest' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name . '-app', plugin_dir_url( __FILE__ ) . 'js/prod/js/battle.js', array( $this->plugin_name . '-vendor' ), $this->version, true );
+
+
+		wp_localize_script( $this->plugin_name . '-manifest', 'asl_battle', array(
+			'asl_rest_uri' => get_rest_url(),
+			'nonce'        => wp_create_nonce( 'wp_rest' ),
+			'url'          => admin_url( 'admin-ajax.php' )
+		) );
 
 	}
 

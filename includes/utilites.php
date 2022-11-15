@@ -25,7 +25,7 @@ if ( ! function_exists( 'battles_admin_role' ) ) {
 function get_battle( $id ) {
 	global $wpdb;
 	$dbBattle  = $wpdb->prefix . battle_table_name;
-	$head      = $wpdb->get_results( "SELECT post_title, post_content FROM $wpdb->posts WHERE ID = $id" );
+	$head      = $wpdb->get_results( "SELECT post_title, post_content, post_modified FROM $wpdb->posts WHERE ID = $id" );
 	$arguments = $wpdb->get_results( "SELECT * FROM $dbBattle WHERE `id_item` = $id" );
 
 	if ( ! empty( $head ) ) {
@@ -33,6 +33,7 @@ function get_battle( $id ) {
 			'id'                   => $id,
 			'title'                => $head[0]->post_title,
 			'content'              => $head[0]->post_content,
+			'date'                 => $head[0]->post_modified,
 			'first_argument_head'  => get_post_meta( $id, 'first_argument', true ),
 			'second_argument_head' => get_post_meta( $id, 'second_argument', true ),
 			'rating'               => get_post_meta( $id, 'rating', true ),

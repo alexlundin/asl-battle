@@ -80,26 +80,16 @@ const FormBattle = ({name, onFinish, textBtn, id = ''}: FormProps) => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row gutter={15}>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Rating"
-                                name="rating"
-                                initialValue={0}
-                            >
-                                <InputNumber min={0} style={{width: '100%'}}/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Views Count"
-                                name="count_views"
-                                initialValue={0}
-                            >
-                                <InputNumber min={0} style={{width: '100%'}}/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+
+                    <Form.Item
+                        label="Rating"
+                        name="rating"
+                        initialValue={0}
+                    >
+                        <InputNumber min={0} style={{width: '100%'}}/>
+                    </Form.Item>
+
+
                     <Form.Item>
                         <Button type="primary" htmlType="submit">{textBtn}</Button>
                     </Form.Item>
