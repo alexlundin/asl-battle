@@ -43,7 +43,7 @@ export const battleApi = createApi({
         updateBattle: build.mutation<IBattle, IBattle>({
             query: (data) => ({
                 url: `battles/${data.id}`,
-                method: "PUT",
+                method: "POST",
                 body: data
             }),
             invalidatesTags: ['Battle']
@@ -81,7 +81,7 @@ export const argumentApi = createApi({
         editArgument: build.mutation<IArgument, any>({
             query: (data) => ({
                 url: `/battles/${data.id_item}/arguments/${data.id}`,
-                method: "PUT",
+                method: "POST",
                 body: data
             }),
             invalidatesTags: ['Argument']

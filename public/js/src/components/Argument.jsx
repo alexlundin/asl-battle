@@ -22,13 +22,16 @@ const Argument = ( {item, first, second} ) => {
 
 
         const updRating = () => {
-            const body = {}
-            body.id = item.id
-            body.id_item = item.id_item
-            body.rating = parseInt( item.rating ) + 1
-            body._wpnonce = nonce
+            const body = new FormData()
+            body.append('id', item.id)
+            body.append('id_item', item.id_item)
+            body.append('rating',  parseInt( item.rating ) + 1)
+            body.append('_wpnonce', nonce)
 
-            axios.put( `${asl_rest_uri}asl-battle/v1/battles/${item.id_item}/arguments/${item.id}`, body ).then( function ( response ) {
+            axios.post(
+                `${asl_rest_uri}asl-battle/v1/battles/${item.id_item}/arguments/${item.id}`,
+                body
+            ).then( function ( response ) {
                 if (response.status !== 200) {
                     throw new Error( 'Can\'t add poll. Server error.' );
                 }

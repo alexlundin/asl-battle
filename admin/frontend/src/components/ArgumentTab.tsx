@@ -77,7 +77,13 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
         {
             title: 'Argument',
             dataIndex: 'argument',
-
+            render: (argument) => {
+                if (argument == 'first') {
+                    return ('plus')
+                } else {
+                    return ('minus')
+                }
+            }
         },
         {
             title: 'Description',

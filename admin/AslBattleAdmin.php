@@ -226,7 +226,7 @@ class AslBattleAdmin {
 				'permission_callback' => '__return_true'
 			],
 			[
-				'methods'             => 'PUT',
+				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_edit_battle' ],
 				'permission_callback' => '__return_true'
 			]
@@ -251,7 +251,7 @@ class AslBattleAdmin {
 				'permission_callback' => '__return_true'
 			],
 			[
-				'methods'             => 'PUT',
+				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_battle_update_argument' ],
 				'permission_callback' => '__return_true'
 			],

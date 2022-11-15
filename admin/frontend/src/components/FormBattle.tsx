@@ -63,7 +63,7 @@ const FormBattle = ({name, onFinish, textBtn, id = ''}: FormProps) => {
                     <Row gutter={10}>
                         <Col span={12}>
                             <Form.Item
-                                label="First Head"
+                                label="Plus Head"
                                 name="first_argument_head"
                                 rules={[{required: true}]}
                             >
@@ -72,7 +72,7 @@ const FormBattle = ({name, onFinish, textBtn, id = ''}: FormProps) => {
                         </Col>
                         <Col span={12}>
                             <Form.Item
-                                label="Second Head"
+                                label="Minus Head"
                                 name="second_argument_head"
                                 rules={[{required: true}]}
                             >

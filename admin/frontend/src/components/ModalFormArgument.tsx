@@ -72,8 +72,8 @@ const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCan
                         initialValue='first'
                     >
                         <Select>
-                            <Select.Option value="first">First</Select.Option>
-                            <Select.Option value="second">Second</Select.Option>
+                            <Select.Option value="first">Plus</Select.Option>
+                            <Select.Option value="second">Minus</Select.Option>
                         </Select>
                     </Form.Item>
                     <Form.Item

@@ -21,12 +21,12 @@ export const Term = ( {rating, text, name, date, id} ) => {
     }, [] );
 
     const updRating = () => {
-        const body = {}
-        body.id = id
-        body.rating = parseInt( rating ) + 1
-        body._wpnonce = nonce
+        const body = new FormData()
+        body.append('id', id)
+        body.append('rating',  parseInt( rating ) + 1)
+        body.append('_wpnonce', nonce)
 
-        axios.put( `${asl_rest_uri}asl-battle/v1/battles/${id}`, body ).then( function ( response ) {
+        axios.post( `${asl_rest_uri}asl-battle/v1/battles/${id}`, body ).then( function ( response ) {
             if (response.status !== 200) {
                 throw new Error( 'Can\'t add poll. Server error.' );
             }
