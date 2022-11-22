@@ -200,9 +200,7 @@ class AslBattleAdmin {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_create_battle' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			]
 		] );
 		register_rest_route( 'asl-battle/v1', '/battles/(?P<id>\d+)', [
@@ -214,16 +212,12 @@ class AslBattleAdmin {
 			[
 				'methods'             => 'DELETE',
 				'callback'            => [ $this, 'rest_delete_battle' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			],
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_edit_battle' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			]
 		] );
 
@@ -236,9 +230,7 @@ class AslBattleAdmin {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_battle_add_argument' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			],
 		] );
 		register_rest_route( 'asl-battle/v1', '/battles/(?P<post_id>\d+)/arguments/(?P<id>\d+)', [
@@ -250,16 +242,12 @@ class AslBattleAdmin {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_battle_update_argument' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			],
 			[
 				'methods'             => 'DELETE',
 				'callback'            => [ $this, 'rest_battle_delete_argument' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			],
 		] );
 
@@ -272,9 +260,7 @@ class AslBattleAdmin {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_battle_add_comment' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			],
 		] );
 		register_rest_route( 'asl-battle/v1', '/battles/(?P<post_id>\d+)/comments/(?P<id>\d+)', [
@@ -286,16 +272,12 @@ class AslBattleAdmin {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_battle_update_comment' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			],
 			[
 				'methods'             => 'DELETE',
 				'callback'            => [ $this, 'rest_battle_delete_comment' ],
-				'permission_callback' => function () {
-					return current_user_can( 'edit_posts' );
-				}
+				'permission_callback' => '__return_true'
 			],
 		] );
 	}
