@@ -56,7 +56,7 @@ export const Term = ( {rating, text, name, date, id} ) => {
                         <article className="user user-small">
                             <span className="user-avatar">
                                 <span className="avatar">
-                                      <Avatar name={name} size={42} textSizeRatio={2}/>
+                                      <Avatar name={name} size={42}  round={true} textSizeRatio={2}/>
                                 </span>
                             </span>
                             <span className="user-info">

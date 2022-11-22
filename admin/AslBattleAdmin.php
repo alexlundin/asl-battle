@@ -261,38 +261,43 @@ class AslBattleAdmin {
 				'permission_callback' => '__return_true'
 			],
 		] );
-// TODO обновление с комментариями
 
-//		register_rest_route( 'asl-battle/v1', '/battles/(?P<post_id>\d+)/comments', [
-//			[
-//				'methods'  => 'GET',
-//				'callback' => [ $this, 'rest_battle_get_comments' ]
-//			],
-//			[
-//				'methods'  => 'POST',
-//				'callback' => [ $this, 'rest_battle_add_comment' ],
-//			],
-//		] );
-//		register_rest_route( 'asl-battle/v1', '/battles/(?P<post_id>\d+)/comments/(?P<id>\d+)', [
-//			[
-//				'methods'  => 'GET',
-//				'callback' => [ $this, 'rest_battle_get_comment' ]
-//			],
-//			[
-//				'methods'  => 'PUT',
-//				'callback' => [ $this, 'rest_battle_update_comment' ],
-//			],
-//			[
-//				'methods'  => 'DELETE',
-//				'callback' => [ $this, 'rest_battle_delete_comment' ],
-//			],
-//		] );
+		register_rest_route( 'asl-battle/v1', '/battles/(?P<id>\d+)/comments', [
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'rest_battle_get_comments' ],
+				'permission_callback' => '__return_true'
+			],
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'rest_battle_add_comment' ],
+				'permission_callback' => '__return_true'
+			],
+		] );
+		register_rest_route( 'asl-battle/v1', '/battles/(?P<post_id>\d+)/comments/(?P<id>\d+)', [
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'rest_battle_get_comment' ],
+				'permission_callback' => '__return_true'
+			],
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'rest_battle_update_comment' ],
+				'permission_callback' => '__return_true'
+			],
+			[
+				'methods'             => 'DELETE',
+				'callback'            => [ $this, 'rest_battle_delete_comment' ],
+				'permission_callback' => '__return_true'
+			],
+		] );
 	}
 
 	public function rest_get_battles(): void {
 		global $wpdb;
-		$dbBattle = $wpdb->prefix . battle_table_name;
-		$head     = $wpdb->get_results( "SELECT ID, post_title, post_content, post_modified FROM $wpdb->posts WHERE `post_type` = '$this->cpt_name'" );
+		$dbBattle   = $wpdb->prefix . battle_table_name;
+		$dbComments = $wpdb->prefix . battle_comment_table_name;
+		$head       = $wpdb->get_results( "SELECT ID, post_title, post_content, post_modified FROM $wpdb->posts WHERE `post_type` = '$this->cpt_name'" );
 
 		if ( ! empty( $head ) ) {
 			foreach ( $head as $key => $item ) {
@@ -504,6 +509,91 @@ class AslBattleAdmin {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $dbBattle WHERE id = '%d'",
+				(int) $id
+			)
+		);
+	}
+
+	public function rest_battle_get_comments( WP_REST_Request $request ) {
+		global $wpdb;
+		$dbComments = $wpdb->prefix . battle_comment_table_name;
+
+		$id  = $request->get_param( 'id' );
+		$res = $wpdb->get_results( "SELECT * FROM $dbComments WHERE `comment_battle_id` = $id" );
+
+		wp_send_json( $res );
+	}
+
+	public function rest_battle_add_comment( WP_REST_Request $request ) {
+		global $wpdb;
+		$dbComments = $wpdb->prefix . battle_comment_table_name;
+
+		$date = new DateTime();
+		$data = $request->get_params();
+		$res  = $wpdb->prepare( $wpdb->insert( $dbComments, [
+			'comment_battle_id'   => (int) $data['comment_battle_id'],
+			'comment_argument_id' => $data['comment_argument_id'],
+			'comment_author'      => $data['comment_author'],
+			'comment_date'        => $date->format( 'Y-m-d H:i:s' ),
+			'comment_text'        => $data['comment_text'],
+			'comment_moderate'    => (int) $data['comment_moderate'],
+			'comment_rating'      => $data['comment_rating'],
+			'comment_parent'      => (int) $data['comment_parent'],
+		] ) );
+		wp_send_json( (bool) $res, 200 );
+	}
+
+	public function rest_battle_get_comment( WP_REST_Request $request ) {
+		$id = $request->get_param( 'id' );
+		wp_send_json( get_battle_comment( $id ) );
+	}
+
+	public function rest_battle_update_comment( WP_REST_Request $request ) {
+		global $wpdb;
+		$dbComments = $wpdb->prefix . battle_comment_table_name;
+		$id       = $request->get_param( 'id' );
+		$old      = get_battle_comment( $id );
+		$new      = $request->get_params();
+		$result   = array_diff_assoc( $new, $old );
+		foreach ( $result as $key => $val ) {
+			switch ( $key ) {
+				case 'comment_battle_id':
+					$wpdb->update( $dbComments, [ 'comment_battle_id' => $val ], [ 'id' => $id ] );
+					break;
+				case 'comment_argument_id':
+					$wpdb->update( $dbComments, [ 'comment_argument_id' => $val ], [ 'id' => $id ] );
+					break;
+				case 'comment_author':
+					$wpdb->update( $dbComments, [ 'comment_author' => $val ], [ 'id' => $id ] );
+					break;
+				case 'comment_date':
+					$wpdb->update( $dbComments, [ 'comment_date' => $val ], [ 'id' => $id ] );
+					break;
+				case 'comment_text':
+					$wpdb->update( $dbComments, [ 'comment_text' => $val ], [ 'id' => $id ] );
+					break;
+				case 'comment_moderate':
+					$wpdb->update( $dbComments, [ 'comment_moderate' => $val ], [ 'id' => $id ] );
+					break;
+				case 'comment_rating':
+					$wpdb->update( $dbComments, [ 'comment_rating' => $val ], [ 'id' => $id ] );
+					break;
+				case 'comment_parent':
+					$wpdb->update( $dbComments, [ 'comment_parent' => $val ], [ 'id' => $id ] );
+					break;
+			}
+		}
+		wp_send_json( get_battle( $id ), 200 );
+	}
+
+	public function rest_battle_delete_comment( WP_REST_Request $request ) {
+		global $wpdb;
+		$dbComments = $wpdb->prefix . battle_comment_table_name;
+		$id         = $request->get_param( 'id' );
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $dbComments WHERE id = '%d'",
 				(int) $id
 			)
 		);

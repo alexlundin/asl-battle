@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {IBattle, IArgument} from "../../types/types";
+import {IBattle, IArgument, IComment} from "../../types/types";
 import React from "react";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -103,37 +103,37 @@ export const commentApi = createApi({
     }),
     tagTypes: ['Comment'],
     endpoints: (build) => ({
-        getComments: build.query({
-            query: (id: string) => ({
+        getComments: build.query<IComment[], unknown>({
+            query: (id:string) => ({
                 url: `battles/${id}/comments`
             }),
             providesTags: result => ['Comment']
         }),
-        getComment: build.query({
+        getComment: build.query<IComment, any>({
             query: ({id, commentId}) => ({
                 url: `battles/${id}/comments/${commentId}`
             }),
             providesTags: result => ['Comment']
         }),
-        addComment: build.mutation({
+        addComment: build.mutation<IComment, IComment>({
             query: (data) => ({
-                url: `battles/${data.id_item}/comments`,
+                url: `battles/${data.comment_battle_id}/comments`,
                 method: "POST",
                 body: data
             }),
             invalidatesTags: ['Comment']
         }),
-        editComment: build.mutation({
+        editComment: build.mutation<IComment, any>({
             query: (data) => ({
-                url: `/battles/${data.item_id}/comments/${data.id}`,
-                method: "PUT",
+                url: `/battles/${data.comment_battle_id}/comments/${data.id}`,
+                method: "POST",
                 body: data
             }),
             invalidatesTags: ['Comment']
         }),
         deleteComment: build.mutation({
-            query: ({item_id, id}) => ({
-                url: `/battles/${item_id}/comments/${id}`,
+            query: ({battle_id, id}) => ({
+                url: `/battles/${battle_id}/comments/${id}`,
                 method: "DELETE"
             }),
             invalidatesTags: ['Comment']

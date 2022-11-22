@@ -19,3 +19,14 @@ export interface IArgument {
     moderate: string;
     username: string;
 }
+
+export interface IComment {
+    id: string
+    comment_battle_id: string
+    comment_argument_id: string
+    comment_author: string
+    comment_date: string
+    comment_text: string
+    comment_moderate: string
+    comment_rating: string
+}

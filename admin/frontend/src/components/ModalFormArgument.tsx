@@ -11,10 +11,12 @@ interface CollectionCreateFormProps {
     id: string
     argumentId: string
     name: string,
-    textBtn: string
+    textBtn: string,
+    argumentTitle: string
+
 }
 
-const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCancel, id, argumentId, name, textBtn}) => {
+const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCancel, id, argumentId, name, textBtn,argumentTitle}) => {
     const [form] = Form.useForm();
     const {data, isLoading} = useFetchArgumentQuery({id, argumentId})
     useEffect(() => {
@@ -32,11 +34,10 @@ const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCan
         <Spin spinning={isLoading}>
             <Modal
                 open={open}
-                title="Add a new argument"
+                title={argumentTitle}
                 okText={textBtn}
                 cancelText="Cancel"
                 onCancel={onCancel}
-
                 onOk={() => {
                     form
                         .validateFields()

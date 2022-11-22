@@ -66,7 +66,7 @@
   transition: .5s ease-out;
   -webkit-font-smoothing: antialiased;
 
-  .text-body>*:first-child {
+  .text-body > *:first-child {
     margin-top: 0;
     padding-top: 0;
   }
@@ -79,6 +79,8 @@
     padding: 0;
     box-sizing: border-box;
   }
+
+
 
   .upvote {
     position: relative;
@@ -107,6 +109,25 @@
       transform: translateX(-50%);
       font-size: 16px;
 
+    }
+  }
+
+  .upvote-type-inline.upvote-disabled {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .upvote-type-inline {
+    padding: 3px 9px 4px 20px;
+    font-size: 100%;
+    font-weight: 600;
+    border: none;
+    position: relative;
+    top: -2px;
+
+    span {
+      top: 5%;
+      left: 35%;
     }
   }
 
@@ -383,6 +404,8 @@
 
   .user {
     text-decoration: none;
+    display: flex;
+    align-items: center;
 
     .user-tiny {
       overflow: hidden;
@@ -448,22 +471,11 @@
   }
 
   .avatar {
-    display: inline-block;
-    border-radius: 50%;
     min-height: 20px;
     min-width: 20px;
     box-sizing: border-box;
-    background-color: #bdc3c7;
-    vertical-align: middle;
-    overflow: hidden;
     background-position: 50% 50%;
     background-size: cover;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
   }
 
   .post-comments {
@@ -551,6 +563,7 @@
         display: flex;
         grid-gap: 0 6px;
         gap: 0 6px;
+        align-items: center;
       }
 
       .comment-header {
@@ -617,7 +630,7 @@
       }
 
       &-side-a {
-        background: rgba(76,152,213,.3);
+        background: rgba(76, 152, 213, .3);
 
         .comment-header {
           grid-column-start: 2;
@@ -640,6 +653,7 @@
     padding: 0 20px;
     flex-direction: column;
     margin-bottom: 20px;
+
     label {
       font-size: 18px;
       margin-bottom: 5px;
@@ -694,4 +708,128 @@
       font-size: 16px;
     }
   }
+
+  .comment-footer-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 4px 10px 5px;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    max-width: 300px;
+    font-size: 90%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &:hover {
+      background-color: var(--opposite-bg-color);
+      color: var(--opposite-text-color);
+    }
+  }
+
+  .replies {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0;
+
+    &-indent-normal {
+      padding-left: 70px;
+    }
+
+    .reply {
+      margin: 10px 0 15px;
+      padding: 10px 0 10px 10px;
+      scroll-margin-top: 20px;
+      display: grid;
+      grid-template-columns: 35px minmax(auto, 1fr) 50px;
+      grid-template-rows: auto auto min-content auto;
+      justify-content: start;
+
+      &-header {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: stretch;
+        padding-bottom: 10px;
+        font-size: 110%;
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        justify-self: start;
+        align-self: start;
+      }
+
+      &-avatar {
+        width: 26px;
+        height: 26px;
+        top: -2px;
+        position: relative;
+        margin-right: 5px;
+      }
+
+      &-date {
+        text-decoration: none;
+        opacity: .6;
+        font-size: 85%;
+        padding-left: 10px;
+        line-height: 24px;
+      }
+
+      &-rating {
+        grid-column-start: 3;
+        grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 4;
+        justify-self: end;
+        align-self: start;
+      }
+
+      &-body {
+        font-size: 90%;
+        padding-left: 5px;
+        padding-bottom: 5px;
+        text-overflow: ellipsis;
+        word-break: break-word;
+      }
+
+      &-body,
+      &-collapse-stub {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 2;
+        grid-row-end: 3;
+        justify-self: stretch;
+        align-self: start;
+      }
+
+
+      .comment-header-author-name {
+        text-decoration: none;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .text-body {
+    position: relative;
+    font-style: normal;
+    color: var(--text-color);
+    font-family: var(--serif-font);
+    font-weight: 400;
+    max-width: 100%;
+    letter-spacing: .01rem;
+    word-break: break-word;
+    text-overflow: ellipsis;
+  }
+
+  .text-body-type-comment {
+    font-size: 115%;
+    line-height: 1.67;
+    letter-spacing: .01rem;
+  }
+
 }

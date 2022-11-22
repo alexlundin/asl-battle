@@ -62,27 +62,26 @@ class AslBattlesActivator {
 			dbDelta( $sql );
 		}
 
-//		TODO Раскомментировать при добавлении комментариев
-//		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_comment_name'" ) !== $table_comment_name ) {
-//			$sql
-//				= "CREATE TABLE $table_comment_name (
-//				id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-//				comment_battle_id int(11) NOT NULL,
-//				comment_argument_id int(11) NOT NULL,
-//				comment_author tinytext NOT NULL,
-//				comment_author_email varchar(100),
-//				comment_author_ip varchar(100),
-//				comment_date datetime,
-//				comment_text longtext,
-//				comment_rating int DEFAULT 0,
-//				comment_moderate varchar(20) DEFAULT '0',
-//				comment_parent bigint unsigned DEFAULT 0,
-//				user_id bigint DEFAULT 0
-//			) $charset_collate;";
-//
-//			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-//			dbDelta( $sql );
-//		}
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_comment_name'" ) !== $table_comment_name ) {
+			$sql
+				= "CREATE TABLE $table_comment_name (
+				id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				comment_battle_id int(11) NOT NULL,
+				comment_argument_id int(11) NOT NULL,
+				comment_author tinytext NOT NULL,
+				comment_author_email varchar(100),
+				comment_author_ip varchar(100),
+				comment_date datetime,
+				comment_text longtext,
+				comment_rating int DEFAULT 0,
+				comment_moderate varchar(20) DEFAULT '0',
+				comment_parent bigint unsigned DEFAULT 0,
+				user_id bigint DEFAULT 0
+			) $charset_collate;";
+
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+		}
 	}
 
 }

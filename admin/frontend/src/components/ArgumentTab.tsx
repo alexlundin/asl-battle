@@ -47,6 +47,7 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
                     setOpen(true);
                     refetch()
                     setButtonText('Update')
+                    setArgumentTitle('Edit argument')
                     setName('editArgument')
                     setArgumentID(id)
                 }}>{id}</Button>)
@@ -64,6 +65,7 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
                             onClick={() => {
                                 setOpen(true);
                                 setName('editArg')
+                                setArgumentTitle('Edit argument')
                                 setButtonText('Update')
                                 setArgumentID(item['id'])
                             }}
@@ -130,6 +132,7 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
 
     const [name, setName] = useState('')
     const [argumentId, setArgumentID] = useState('')
+    const [argumentTitle, setArgumentTitle] = useState('Add a new argument')
     const [buttonText, setButtonText] = useState('Add')
     const [open, setOpen] = useState(false);
 
@@ -199,10 +202,12 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
     const onCreate = (values: IArgument) => {
         if (name === 'addArgument') {
             setButtonText('Add')
+            setArgumentTitle('Add a new argument')
             addArgument(values)
         } else {
             editArgument(values)
             setButtonText('Update')
+            setArgumentTitle('Edit argument')
         }
         setOpen(false)
     }
@@ -228,6 +233,7 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
                     setOpen(true);
                     refetch()
                     setName('addArgument')
+                    setArgumentTitle('Add a new argument')
                     setButtonText('Add')
                 }}>Add Argument</Button>
             </PageHeader>
@@ -243,6 +249,7 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
                 argumentId={argumentId}
                 textBtn={buttonText}
                 name={name}
+                argumentTitle={argumentTitle}
                 onCancel={() => {
                     setOpen(false);
                 }}

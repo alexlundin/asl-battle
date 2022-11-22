@@ -1,5 +1,5 @@
 import React from 'react'
-import { BsCalendar, BsEye } from "react-icons/bs";
+import { BsCalendar } from "react-icons/bs";
 
 export const Head = ( {first, second, date} ) => {
     const newDate = new Date( date.split( ' ' )[0] )

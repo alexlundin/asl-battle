@@ -87,3 +87,28 @@ function get_argument( $id ) {
 
 	return $response;
 }
+
+function get_battle_comment( $id ) {
+	global $wpdb;
+	$dbComments = $wpdb->prefix . battle_comment_table_name;
+
+	$comment = $wpdb->get_results( "SELECT * FROM $dbComments WHERE `id` = $id" );
+
+	if ( ! empty( $comment ) ) {
+		$response = [
+			'id'                  => $comment[0]->id,
+			'comment_battle_id'   => $comment[0]->comment_battle_id,
+			'comment_argument_id' => $comment[0]->comment_argument_id,
+			'comment_author'      => $comment[0]->comment_author,
+			'comment_date'        => $comment[0]->comment_date,
+			'comment_text'        => $comment[0]->comment_text,
+			'comment_moderate'    => $comment[0]->comment_moderate,
+			'comment_rating'      => $comment[0]->comment_rating,
+			'comment_parent'      => $comment[0]->comment_parent
+		];
+	} else {
+		$response = [];
+	}
+
+	return $response;
+}

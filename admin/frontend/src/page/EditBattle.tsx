@@ -3,9 +3,10 @@ import PageHeader from "../components/PageHeader";
 import {Badge, message, Tabs} from "antd";
 import FormBattle from "../components/FormBattle";
 import {IBattle} from "../types/types";
-import {useFetchArgumentsQuery, useUpdateBattleMutation} from "../redux/api/battle";
+import {useFetchArgumentsQuery, useGetCommentsQuery, useUpdateBattleMutation} from "../redux/api/battle";
 import {useParams} from 'react-router-dom';
 import ArgumentTab from "../components/ArgumentTab";
+import CommentTab from "../components/CommentTab";
 
 
 const EditBattle = () => {
@@ -13,8 +14,9 @@ const EditBattle = () => {
     const id: string = params.id ? params.id : ''
     const [updateBattle, {data, isSuccess, isError, error}] = useUpdateBattleMutation()
     const {data: args} = useFetchArgumentsQuery(id)
+    const {data: comments} = useGetCommentsQuery(id)
     const [count, setCount] = useState(0)
-
+    const [countComment, setCountComment] = useState(0)
 
     useEffect(() => {
         if (args) {
@@ -23,6 +25,13 @@ const EditBattle = () => {
         }
     }, [args]);
 
+    useEffect(() => {
+        if (comments) {
+            const moderItem = comments.filter(item => item.comment_moderate === "")
+
+            setCountComment(moderItem.length)
+        }
+    }, [comments]);
 
 
     const onFinish = (values: IBattle) => {
@@ -36,10 +45,16 @@ const EditBattle = () => {
             children: (<FormBattle name="edit" onFinish={onFinish} textBtn="Update" id={id}/>)
         },
         {
-            label: <Badge count={count} offset={[10, 10]}>Arguments</Badge>,
+            label: <Badge count={count} offset={[13, 7]}>Arguments</Badge>,
             key: 'arguments',
             forceRender: true,
             children: (<ArgumentTab id={id}/>)
+        },
+        {
+            label: <Badge count={countComment} offset={[13, 7]}>Comments</Badge>,
+            key: 'comments',
+            forceRender: true,
+            children: (<CommentTab id={id}/>),
         }
     ];
 
