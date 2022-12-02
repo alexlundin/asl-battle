@@ -50,6 +50,7 @@ const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCan
                             console.log('Validate Failed:', info);
                         });
                 }}
+                width={900}
             >
 
                 <Form

@@ -24,9 +24,11 @@ if ( ! function_exists( 'battles_admin_role' ) ) {
 
 function get_battle( $id ) {
 	global $wpdb;
-	$dbBattle  = $wpdb->prefix . battle_table_name;
-	$head      = $wpdb->get_results( "SELECT post_title, post_content, post_modified FROM $wpdb->posts WHERE ID = $id" );
-	$arguments = $wpdb->get_results( "SELECT * FROM $dbBattle WHERE `id_item` = $id" );
+	$dbBattle   = $wpdb->prefix . battle_table_name;
+	$dbComments = $wpdb->prefix . battle_comment_table_name;
+	$head       = $wpdb->get_results( "SELECT post_title, post_content, post_modified FROM $wpdb->posts WHERE ID = $id" );
+	$arguments  = $wpdb->get_results( "SELECT * FROM $dbBattle WHERE `id_item` = $id" );
+	$comments = $wpdb->get_results("SELECT * FROM $dbComments WHERE `comment_battle_id` = $id");
 
 	if ( ! empty( $head ) ) {
 		$response = [
@@ -39,6 +41,8 @@ function get_battle( $id ) {
 			'rating'               => get_post_meta( $id, 'rating', true ),
 			'count_views'          => get_post_meta( $id, 'count_view', true ),
 			'username'             => get_post_meta( $id, 'username', true ),
+			'arguments'            => [],
+			'comments'             => []
 		];
 
 		foreach ( $arguments as $argument ) {
@@ -53,6 +57,20 @@ function get_battle( $id ) {
 				'username'   => $argument->username,
 				'email'      => $argument->email,
 				'created_at' => $argument->created_at,
+			];
+		}
+
+		foreach ($comments as $comment) {
+			$response['comments'][] = [
+				'id'                  => $comment->id,
+				'comment_battle_id'   => $comment->comment_battle_id,
+				'comment_argument_id' => $comment->comment_argument_id,
+				'comment_author'      => $comment->comment_author,
+				'comment_date'        => $comment->comment_date,
+				'comment_text'        => $comment->comment_text,
+				'comment_moderate'    => $comment->comment_moderate,
+				'comment_rating'      => $comment->comment_rating,
+				'comment_parent'      => $comment->comment_parent
 			];
 		}
 	} else {

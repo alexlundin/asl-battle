@@ -3,6 +3,7 @@ import App from "./App";
 import HomePage from "./page/HomePage";
 import AddBattle from "./page/AddBattle";
 import EditBattle from "./page/EditBattle";
+import CommentsPage from "./page/CommentsPage";
 
 export const router = createHashRouter([
     {
@@ -16,6 +17,10 @@ export const router = createHashRouter([
             {
                 path: "/add",
                 element: <AddBattle/>
+            },
+            {
+                path: "/comments",
+                element: <CommentsPage/>
             },
             {
                 path: "/battle/:id",

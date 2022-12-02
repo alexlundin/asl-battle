@@ -1,4 +1,4 @@
-import {Button, Divider, message, Modal, Table} from 'antd';
+import {Button, Divider, message, Modal, Switch, Table} from 'antd';
 import React, {useEffect, useState} from 'react';
 import PageHeader from "./PageHeader";
 import {ColumnsType} from "antd/es/table";
@@ -16,6 +16,7 @@ interface DataType {
     key: string
     id: string
     title: string
+    battle_id: string
     argument: string
     text: string
     moderate: boolean
@@ -34,6 +35,16 @@ interface DeleteProp {
 
 const ArgumentTab = ({id = ''}: ArgumentProp) => {
     const {confirm} = Modal;
+
+    const handleSwitchChange = (record: any, check: boolean) => {
+        console.log(record)
+        const vals = {
+            id: record.id,
+            id_item: record.battle_id,
+            moderate: check
+        }
+        editArgument(vals)
+    }
 
     const argumentsBattle: DataType[] = []
     const columns: ColumnsType<DataType> = [
@@ -94,12 +105,18 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
         {
             title: 'Public',
             dataIndex: 'moderate',
-            render: (moderate: boolean) => {
-                if (moderate) {
-                    return <CheckOutlined style={{color: 'green', fontSize: 16}}/>
-                } else {
-                    return <CloseOutlined style={{color: 'red', fontSize: 16}}/>
-                }
+            render: (e, record) => {
+                return (
+                    <Switch
+                        checkedChildren={<CheckOutlined/>}
+                        unCheckedChildren={<CloseOutlined/>}
+                        onChange={(checked) => {
+                            handleSwitchChange(record, checked)
+                        }}
+                        defaultChecked={e}
+                        checked={e}
+                    />
+                )
             }
         },
         {
@@ -217,6 +234,7 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
             argumentsBattle.unshift({
                 key: item.id,
                 id: item.id,
+                battle_id: item.id_item,
                 title: item.title,
                 argument: item.argument,
                 text: item.text,

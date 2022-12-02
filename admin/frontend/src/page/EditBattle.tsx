@@ -6,7 +6,6 @@ import {IBattle} from "../types/types";
 import {useFetchArgumentsQuery, useGetCommentsQuery, useUpdateBattleMutation} from "../redux/api/battle";
 import {useParams} from 'react-router-dom';
 import ArgumentTab from "../components/ArgumentTab";
-import CommentTab from "../components/CommentTab";
 
 
 const EditBattle = () => {
@@ -16,23 +15,13 @@ const EditBattle = () => {
     const {data: args} = useFetchArgumentsQuery(id)
     const {data: comments} = useGetCommentsQuery(id)
     const [count, setCount] = useState(0)
-    const [countComment, setCountComment] = useState(0)
 
     useEffect(() => {
         if (args) {
-            const moderItem = args.filter(item => parseInt(item.moderate) === 0)
+            const moderItem = args.filter(item => item.moderate === "" || item.moderate === "0")
             setCount(moderItem.length)
         }
     }, [args]);
-
-    useEffect(() => {
-        if (comments) {
-            const moderItem = comments.filter(item => item.comment_moderate === "")
-
-            setCountComment(moderItem.length)
-        }
-    }, [comments]);
-
 
     const onFinish = (values: IBattle) => {
         updateBattle(values)
@@ -49,12 +38,6 @@ const EditBattle = () => {
             key: 'arguments',
             forceRender: true,
             children: (<ArgumentTab id={id}/>)
-        },
-        {
-            label: <Badge count={countComment} offset={[13, 7]}>Comments</Badge>,
-            key: 'comments',
-            forceRender: true,
-            children: (<CommentTab id={id}/>),
         }
     ];
 

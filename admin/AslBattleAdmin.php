@@ -89,8 +89,6 @@ class AslBattleAdmin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-//		wp_enqueue_script( $this->plugin_name . '-manifest', plugin_dir_url( __FILE__ ) . 'app/build/manifest.js', array(), $this->version, true );
-//		wp_enqueue_script( $this->plugin_name . '-vendor', plugin_dir_url( __FILE__ ) . 'app/build/vendor.js', array( $this->plugin_name . '-manifest' ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name . '-app', plugin_dir_url( __FILE__ ) . 'frontend/build/index.js', array(), $this->version, true );
 		wp_set_script_translations( $this->plugin_name . '-app', 'asl-polling', plugin_dir_path( __FILE__ ) . '/languages' );
 
@@ -160,13 +158,45 @@ class AslBattleAdmin {
 
 	public function add_menu() {
 		global $submenu;
+		global $wpdb;
 		$capability = battles_admin_role();
+		$dbBattle   = $wpdb->prefix . battle_table_name;
+		$dbComments = $wpdb->prefix . battle_comment_table_name;
+
+		$resArg = $wpdb->get_results( "SELECT `moderate` FROM $dbBattle" );
+		$resCom = $wpdb->get_results( "SELECT `comment_moderate` FROM $dbComments" );
+
+		$countArg = 0;
+		$countCom = 0;
+
+		foreach ( $resCom as $key => $item ) {
+			if ( $resCom[ $key ]->comment_moderate === "0" || $resCom[ $key ]->comment_moderate === "" ) {
+				$countCom ++;
+			}
+		}
+
+		foreach ( $resArg as $key => $item ) {
+			if ( $resArg[ $key ]->moderate === "0" || $resArg[ $key ]->moderate === "" ) {
+				$countArg ++;
+			}
+		}
+		if ( $countArg != 0 ) {
+			$itemArg = '<span class="update-plugins"><span class="plugin-count">' . $countArg . '</span></span>';
+		} else {
+			$itemArg = '';
+		}
+
+		if ( $countCom != 0 ) {
+			$itemCom = '<span class="update-plugins"><span class="plugin-count">' . $countCom . '</span></span>';
+		} else {
+			$itemCom = '';
+		}
 
 		if ( ! $capability ) {
 			return;
 		}
 
-		$menuName = __( 'Battles', ' asl-battle' );
+		$menuName = __( 'Battles' . $itemArg . $itemCom, ' asl-battle' );
 
 		add_menu_page(
 			$menuName,
@@ -175,13 +205,19 @@ class AslBattleAdmin {
 			'asl_battles',
 			array( $this, 'main_page' ),
 			'dashicons-format-chat',
-			25
+			26
 		);
 
 		$submenu['asl_battles']['all_battles'] = [
-			__( 'Battles', 'asl-battle' ),
+			__( 'Battles' . $itemArg, 'asl-battle' ),
 			$capability,
 			'admin.php?page=asl_battles#/',
+		];
+
+		$submenu['asl_battles']['comments'] = [
+			__( 'Comments' . $itemCom, 'asl-battle' ),
+			$capability,
+			'admin.php?page=asl_battles#/comments',
 		];
 
 	}
@@ -299,7 +335,8 @@ class AslBattleAdmin {
 					'rating'               => get_post_meta( $item->ID, 'rating', true ),
 					'count_views'          => get_post_meta( $item->ID, 'count_view', true ),
 					'username'             => get_post_meta( $item->ID, 'username', true ),
-					'arguments'            => []
+					'arguments'            => [],
+					'comments'             => []
 				];
 				$arguments  = $wpdb->get_results( "SELECT * FROM $dbBattle WHERE `id_item` = $item->ID" );
 				foreach ( $arguments as $argument ) {
@@ -314,6 +351,20 @@ class AslBattleAdmin {
 						'username'   => $argument->username,
 						'email'      => $argument->email,
 						'created_at' => $argument->created_at,
+					];
+				}
+				$comments = $wpdb->get_results( "SELECT * FROM $dbComments WHERE `comment_battle_id` = $item->ID" );
+				foreach ( $comments as $comment ) {
+					$response[ $key ]['comments'][] = [
+						'id'                  => $comment->id,
+						'comment_battle_id'   => $comment->comment_battle_id,
+						'comment_argument_id' => $comment->comment_argument_id,
+						'comment_author'      => $comment->comment_author,
+						'comment_date'        => $comment->comment_date,
+						'comment_text'        => $comment->comment_text,
+						'comment_moderate'    => $comment->comment_moderate,
+						'comment_rating'      => $comment->comment_rating,
+						'comment_parent'      => $comment->comment_parent
 					];
 				}
 			}
@@ -370,14 +421,13 @@ class AslBattleAdmin {
 				(int) $id
 			)
 		);
-//TODO обновление с комментариями
 
-//		$wpdb->query(
-//			$wpdb->prepare(
-//				"DELETE FROM $dbComments WHERE comment_battle_id = '%d'",
-//				(int) $id
-//			)
-//		);
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $dbComments WHERE comment_battle_id = '%d'",
+				(int) $id
+			)
+		);
 
 		$del = wp_delete_post( $id );
 		$wpdb->delete( $wpdb->postmeta, [ 'post_id' => $id ] );
@@ -540,10 +590,10 @@ class AslBattleAdmin {
 	public function rest_battle_update_comment( WP_REST_Request $request ) {
 		global $wpdb;
 		$dbComments = $wpdb->prefix . battle_comment_table_name;
-		$id       = $request->get_param( 'id' );
-		$old      = get_battle_comment( $id );
-		$new      = $request->get_params();
-		$result   = array_diff_assoc( $new, $old );
+		$id         = $request->get_param( 'id' );
+		$old        = get_battle_comment( $id );
+		$new        = $request->get_params();
+		$result     = array_diff_assoc( $new, $old );
 		foreach ( $result as $key => $val ) {
 			switch ( $key ) {
 				case 'comment_battle_id':
@@ -586,5 +636,13 @@ class AslBattleAdmin {
 				(int) $id
 			)
 		);
+	}
+
+	public function conditional_plugin_admin_notice() {
+		if ( isset( $_GET['page'] ) && sanitize_text_field( $_GET['page'] ) === 'asl_battles' ) {
+			remove_action( 'admin_notices', 'update_nag', 3 );
+			remove_action( 'network_admin_notices', 'update_nag', 3 );
+			echo '<style>.update-nag, .updated, .notice, .error, .is-dismissible { display: none; }</style>';
+		}
 	}
 }

@@ -4,7 +4,7 @@ import React from "react";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const {asl_battles_rest_uri: url, nonce} = asl_battles_admin
+const {asl_battles_rest_uri: url} = asl_battles_admin
 
 export const battleApi = createApi({
     reducerPath: 'battleApi',
@@ -101,7 +101,7 @@ export const commentApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: `${url}asl-battle/v1/`
     }),
-    tagTypes: ['Comment'],
+    tagTypes: ['Comment', 'Battle'],
     endpoints: (build) => ({
         getComments: build.query<IComment[], unknown>({
             query: (id:string) => ({
@@ -129,7 +129,7 @@ export const commentApi = createApi({
                 method: "POST",
                 body: data
             }),
-            invalidatesTags: ['Comment']
+            invalidatesTags: ['Comment', 'Battle']
         }),
         deleteComment: build.mutation({
             query: ({battle_id, id}) => ({

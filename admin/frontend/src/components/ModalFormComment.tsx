@@ -15,40 +15,25 @@ interface CollectionCreateFormProps {
     onCancel: () => void;
     id: string
     commentId: string
-    name: string,
-    textBtn: string,
-    commentTitle: string
 }
 
 const ModalFormComment: FC<CollectionCreateFormProps> = ({
                                                              open,
                                                              onCreate,
                                                              onCancel,
-                                                             name,
-                                                             textBtn,
                                                              id,
                                                              commentId,
-                                                             commentTitle
                                                          }) => {
     const [form] = Form.useForm();
     const {data} = useGetCommentQuery({id, commentId})
     useEffect(() => {
         form.setFieldsValue(data)
     }, [data])
-    useEffect(() => {
-        if (name == 'addComment') {
-            form.resetFields()
-        }
-    }, [name])
     const validateMessages = {
         required: "${label} is required!",
     };
-
-    const [argumentId, setArgumentId] = useState(0)
-    const {data: battles = []} = useFetchBattlesQuery('')
     const {data: args = []} = useFetchArgumentsQuery(id)
-    const {data: comments = []} = useGetCommentsQuery(id)
-
+    const [argumentId, setArgumentId] = useState(0)
 
     const selectArguments = () => {
         if (args.length == 0) {
@@ -61,6 +46,7 @@ const ModalFormComment: FC<CollectionCreateFormProps> = ({
         }
     }
 
+
     const handleArgument = (value: number) => {
         setArgumentId(value)
     };
@@ -69,8 +55,8 @@ const ModalFormComment: FC<CollectionCreateFormProps> = ({
     return (
         <Modal
             open={open}
-            title={commentTitle}
-            okText={textBtn}
+            title='Edit comment'
+            okText='Update'
             cancelText="Cancel"
             onCancel={onCancel}
             onOk={() => {
@@ -89,7 +75,7 @@ const ModalFormComment: FC<CollectionCreateFormProps> = ({
                 form={form}
                 layout="vertical"
                 validateMessages={validateMessages}
-                name={name}
+                name='editComment'
             >
                 {commentId &&
                     <Form.Item hidden={true} name="id">

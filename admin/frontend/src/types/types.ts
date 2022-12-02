@@ -1,4 +1,5 @@
 export interface IBattle {
+    comments: IComment[];
     id: string;
     title: string;
     content: string;

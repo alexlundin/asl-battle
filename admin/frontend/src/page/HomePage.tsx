@@ -54,7 +54,7 @@ const HomePage = () => {
             title: 'Moderate args',
             dataIndex: 'moderate_args',
             render: (args: IArgument[]): ReactElement => {
-                const moderItem = args.filter(item => parseInt(item.moderate) === 0)
+                const moderItem = args.filter(item => item.moderate === '0' || item.moderate === '')
                 if (moderItem.length == 0) {
                     return (<Badge count={moderItem.length} showZero={true} style={{backgroundColor: '#52c41a'}}/>)
                 } else {

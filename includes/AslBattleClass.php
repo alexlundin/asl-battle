@@ -165,8 +165,9 @@ class AslBattleClass {
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		}
 		$this->loader->add_action( 'init', $plugin_admin, 'register_battle_type' );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'conditional_plugin_admin_notice' );
 		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'register_battle_routes' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu' );
 	}
 
 	/**
@@ -183,6 +184,7 @@ class AslBattleClass {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_public, 'register_block_battle' );
+		$this->loader->add_action('init', $plugin_public, 'battle_shortcode');
 
 //		$this->loader->add_action('wp_ajax_nopriv_update_rating', $plugin_public, 'update_rating_poll');
 //		$this->loader->add_action('wp_ajax_update_rating', $plugin_public, 'update_rating_poll');

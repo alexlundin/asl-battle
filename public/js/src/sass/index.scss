@@ -367,11 +367,11 @@
 
   .text-body {
     position: relative;
-    font-style: normal;
+    //font-style: normal;
     color: var(--text-color);
-    font-weight: 400;
+    //font-weight: 400;
     max-width: 100%;
-    letter-spacing: .01rem;
+    //letter-spacing: .01rem;
     word-break: break-word;
     text-overflow: ellipsis;
 
@@ -424,7 +424,7 @@
 
       .user-name {
         font-weight: 500;
-        font-size: 110%;
+        //font-size: 110%;
         max-width: 100%;
         overflow: hidden;
       }
@@ -816,19 +816,19 @@
 
   .text-body {
     position: relative;
-    font-style: normal;
+    //font-style: normal;
     color: var(--text-color);
-    font-weight: 400;
+    //font-weight: 400;
     max-width: 100%;
-    letter-spacing: .01rem;
+    //letter-spacing: .01rem;
     word-break: break-word;
     text-overflow: ellipsis;
   }
 
   .text-body-type-comment {
-    font-size: 115%;
+    //font-size: 115%;
     line-height: 1.67;
-    letter-spacing: .01rem;
+    //letter-spacing: .01rem;
   }
 
 }

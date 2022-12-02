@@ -10,7 +10,6 @@ body {
 
 .ant-layout-header {
     background: #ffffff!important;
-    overflow: hidden;
     padding: 0 30px!important;
     display: flex;
     align-items: center;
