@@ -543,11 +543,19 @@ class AslBattleAdmin {
 	public function rest_battle_delete_argument( WP_REST_Request $request ) {
 		global $wpdb;
 		$dbBattle = $wpdb->prefix . battle_table_name;
+		$dbComments = $wpdb->prefix . battle_comment_table_name;
 		$id       = $request->get_param( 'id' );
 
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $dbBattle WHERE id = '%d'",
+				(int) $id
+			)
+		);
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $dbComments WHERE comment_argument_id = '%d'",
 				(int) $id
 			)
 		);

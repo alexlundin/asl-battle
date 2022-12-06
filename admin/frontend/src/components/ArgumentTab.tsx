@@ -37,7 +37,6 @@ const ArgumentTab = ({id = ''}: ArgumentProp) => {
     const {confirm} = Modal;
 
     const handleSwitchChange = (record: any, check: boolean) => {
-        console.log(record)
         const vals = {
             id: record.id,
             id_item: record.battle_id,

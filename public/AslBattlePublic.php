@@ -76,15 +76,19 @@ class AslBattlePublic {
 		$head_first_argument  = get_post_meta( $id, 'first_argument', true );
 		$head_second_argument = get_post_meta( $id, 'second_argument', true );
 
-		$arguments         = $wpdb->get_results( "SELECT * FROM $dbname WHERE `id_item` = $id" );
-		$comments          = $wpdb->get_results( "SELECT * FROM $dbComment WHERE `comment_battle_id` = $id" );
-		$first             = get_post_meta( $id, 'first_argument', true );
-		$second            = get_post_meta( $id, 'second_argument', true );
-		$date              = date( "M d, Y", strtotime( $head[0]->post_modified ) );
-		$rating            = get_post_meta( $id, 'rating', true );
-		$content           = $head[0]->post_content;
-		$avatar            = explode( " ", get_post_meta( $id, 'username', true ) );
-		$avatar_name       = mb_substr( $avatar[0], 0, 1 ) . mb_substr( $avatar[1], 0, 1 );
+		$arguments = $wpdb->get_results( "SELECT * FROM $dbname WHERE `id_item` = $id" );
+		$comments  = $wpdb->get_results( "SELECT * FROM $dbComment WHERE `comment_battle_id` = $id" );
+		$first     = get_post_meta( $id, 'first_argument', true );
+		$second    = get_post_meta( $id, 'second_argument', true );
+		$date      = date( "M d, Y", strtotime( $head[0]->post_modified ) );
+		$rating    = get_post_meta( $id, 'rating', true );
+		$content   = $head[0]->post_content;
+		$avatar    = explode( " ", get_post_meta( $id, 'username', true ) );
+		if ( array_key_exists( 1, $avatar ) ) {
+			$avatar_name = mb_substr( $avatar[0], 0, 1 ) . mb_substr( $avatar[1], 0, 1 );
+		} else {
+			$avatar_name = mb_substr( $avatar[0], 0, 1 );
+		}
 		$name              = get_post_meta( $id, 'username', true );
 		$countFirstArg     = 0;
 		$countSecondArg    = 0;
@@ -184,7 +188,11 @@ class AslBattlePublic {
 		foreach ( $listPublicArg as $item ) {
 			$date_args       = date( "M d, Y", strtotime( $item->created_at ) );
 			$avatar_arg      = explode( " ", $item->username );
-			$avatar_name_arg = mb_substr( $avatar_arg[0], 0, 1 ) . mb_substr( $avatar_arg[1], 0, 1 );
+			if ( array_key_exists( 1, $avatar_arg ) ) {
+				$avatar_name_arg = mb_substr( $avatar_arg[0], 0, 1 ) . mb_substr( $avatar_arg[1], 0, 1 );
+			} else {
+				$avatar_name_arg = mb_substr( $avatar_arg[0], 0, 1 );
+			}
 			$secondComments  = array_filter( $publicComments, static function ( $var ) use ( $item ) {
 				return $var->comment_argument_id === $item->id;
 			} );
@@ -392,11 +400,11 @@ class AslBattlePublic {
 	                    </select>
                 	</div>
                 	<div class='formItem'>
-                    	<label>Briefly your argument:</label>
+                    	<label>Briefly describe your argument</label>
                     	<input type='text' name='title'/>
                 	</div>
                 	<div class='formItem'>
-                    	<label>Вetailed response:</label>
+                    	<label>Detailed response</label>
                     	<textarea rows='4' name='text'></textarea>
                 	</div>
                 	<input type='submit' value='Send' class='btn'/>

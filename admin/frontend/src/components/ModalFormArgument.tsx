@@ -43,14 +43,12 @@ const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCan
                         .validateFields()
                         .then(values => {
                             form.resetFields();
-                            // console.log(values)
                             onCreate(values);
                         })
                         .catch(info => {
                             console.log('Validate Failed:', info);
                         });
                 }}
-                width={900}
             >
 
                 <Form
@@ -103,7 +101,7 @@ const ModalFormArgument: FC<CollectionCreateFormProps> = ({open, onCreate, onCan
                             <Form.Item
                                 name="moderate"
                                 label="Public"
-                                initialValue={false}
+                                initialValue={true}
                                 valuePropName="checked"
                             >
                                 <Switch

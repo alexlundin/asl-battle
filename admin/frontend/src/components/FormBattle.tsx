@@ -67,7 +67,7 @@ const FormBattle = ({name, onFinish, textBtn, id = ''}: FormProps) => {
                                 name="first_argument_head"
                                 rules={[{required: true}]}
                             >
-                                <Input/>
+                                <Input.TextArea rows={4}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -76,7 +76,7 @@ const FormBattle = ({name, onFinish, textBtn, id = ''}: FormProps) => {
                                 name="second_argument_head"
                                 rules={[{required: true}]}
                             >
-                                <Input/>
+                                <Input.TextArea rows={4}/>
                             </Form.Item>
                         </Col>
                     </Row>
